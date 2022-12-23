@@ -1,0 +1,7 @@
+﻿---
+BasedOnStyle: Chromium
+AlignConsecutiveAssignments: true
+ColumnLimit: '120'
+MaxEmptyLinesToKeep: '2'
+SortIncludes: true
+...

@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Resource Files\input">
+      <UniqueIdentifier>{1d843b23-2dbc-456e-9128-eaa64437fc21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\test">
+      <UniqueIdentifier>{7fa15b63-2fa2-4136-8374-a6ca4ea73ae2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\output">
+      <UniqueIdentifier>{b442583f-bd18-49eb-9f77-f2c9ce134508}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="day1_input.txt">
+      <Filter>Resource Files\input</Filter>
+    </Text>
+    <Text Include="day2_input.txt">
+      <Filter>Resource Files\input</Filter>
+    </Text>
+    <Text Include="day3_input.txt">
+      <Filter>Resource Files\input</Filter>
+    </Text>
+    <Text Include="day4_input.txt">
+      <Filter>Resource Files\input</Filter>
+    </Text>
+    <Text Include="day5_input.txt">
+      <Filter>Resource Files\input</Filter>
+    </Text>
+    <Text Include="day6_input.txt">
+      <Filter>Resource Files\input</Filter>
+    </Text>
+    <Text Include="day7_input.txt">
+      <Filter>Resource Files\input</Filter>
+    </Text>
+    <Text Include="day5_test.txt">
+      <Filter>Resource Files\test</Filter>
+    </Text>
+    <Text Include="day6_test.txt">
+      <Filter>Resource Files\test</Filter>
+    </Text>
+    <Text Include="day7_test.txt">
+      <Filter>Resource Files\test</Filter>
+    </Text>
+    <Text Include="day7_output.txt">
+      <Filter>Resource Files\output</Filter>
+    </Text>
+    <Text Include="day7_input_lars.txt">
+      <Filter>Resource Files\test</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DiskContent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Header.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Day1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Day2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Day7.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Day3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Day4.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Day5.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Day6.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
