@@ -32,9 +32,11 @@ class File : public DiskContent {
 
 class Directory : public DiskContent {
  public:
+  static const size_t diskSpaceTotal      = 70'000'000;
+  static const size_t diskSpaceForUpgrade = 30'000'000;
+
   Directory(const std::string& name) : DiskContent(name, 0), parent(*this) {}
   Directory(const std::string& name, Directory& parent) : DiskContent(name, 0), parent(parent) {}
-
 
   Directory& getParent() { return this->parent; }
   const std::vector<DiskContent*>& getContent() const { return this->content; }
@@ -55,11 +57,16 @@ class Directory : public DiskContent {
     this->content.push_back(&diskContent);
     this->size += diskContent.getSize();
 
+    if (&this->parent == this)
+      return;
+
+    // also update size of parents
     Directory* parent = &this->parent;
     while (parent != &parent->getParent()) {
       parent->size += diskContent.getSize();
       parent = &parent->getParent();
     }
+    parent->size += diskContent.getSize();
   }
 
   // Does not keep order in content vector
@@ -92,6 +99,21 @@ class Directory : public DiskContent {
         std::cout << dc->getName() << ' ';
       std::cout << std::endl;
     }
+  }
+
+  size_t calcFreeSpace() {
+    // return -1 if not called on root
+    if (&this->parent != this)
+      return -1;
+
+    return diskSpaceTotal - this->getSize();
+  }
+
+  bool hasEnoughSpace() {
+    if (&this->parent != this)
+      return -1;
+
+    return calcFreeSpace() >= this->diskSpaceForUpgrade;
   }
 
   virtual bool isDir() override { return true; }

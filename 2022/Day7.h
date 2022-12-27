@@ -27,17 +27,40 @@ class Day7 : public DayTemplate {
   std::string part2(std::ifstream& inputFile) override {
     util::resetStream(inputFile);
 
-    Directory* fileSystem = parseCommands(inputFile);
-    const int unusedSpace = Day7::maxFileSystemSize - fileSystem->getSize();
+    Directory* fileSystem  = parseCommands(inputFile);
+    size_t diskSpaceNeeded = Directory::diskSpaceForUpgrade - fileSystem->calcFreeSpace();
 
-    return std::to_string(rawr(*fileSystem, unusedSpace));
+    // Check directory sizes from task
+    // unitTest::assertEquals(fileSystem->getSize(), 48381165Ui64);
+    // unitTest::assertEquals(fileSystem->calcFreeSpace(), 21618835Ui64);
+
+    std::vector<Directory*> unvisitedDirs;
+    Directory* dirToDelete = fileSystem;
+    unvisitedDirs.push_back(fileSystem);
+
+    while (!unvisitedDirs.empty()) {
+      Directory* curDir = unvisitedDirs.back();
+      unvisitedDirs.pop_back();
+
+      // Abort if dir with perfect size fit is found
+      if (curDir->getSize() == diskSpaceNeeded)
+        return std::to_string(curDir->getSize());
+
+      // Update currently visited dir
+      if (curDir->getSize() > diskSpaceNeeded && curDir->getSize() < dirToDelete->getSize()) {
+        dirToDelete = (Directory*)curDir;
+      }
+
+      // Refill the queue
+      for (DiskContent* dc : curDir->getContent()) {
+        if (dc->isDir()) {
+          unvisitedDirs.push_back((Directory*)dc);
+        }
+      }
+    }
+
+    return std::to_string(dirToDelete->getSize());
   }
-
- private:
-  static const int maxFileSystemSize = 70'000'000;
-  static const int minUnsedSpace     = 30'000'000;
-  static const int maxUsedSpace      = maxFileSystemSize - minUnsedSpace;
-
 
   Directory* parseCommands(std::ifstream& inputFile) {
     Directory* root    = new Directory("/");
@@ -89,27 +112,5 @@ class Day7 : public DayTemplate {
     }
 
     return sizeSum;
-  }
-
-  size_t rawr(const Directory& directory, const int usedSpace) {
-    size_t spaceSavings = directory.getSize();
-
-    if (directory.getContent().empty()) {
-      if (directory.getSize() <= Day7::minUnsedSpace)  // TODO
-        return -1;  // This should only occur when there is no dir that is small enough
-      return spaceSavings;
-    }
-
-    // Find smallest dir in current dir
-    for (DiskContent* diskContent : directory.getContent()) {
-      if (diskContent->isDir()) {
-        size_t childDirSavings = diskContent->getSize();
-
-        if (usedSpace - childDirSavings >= usedSpace - spaceSavings)  // TODO
-          spaceSavings = rawr((Directory&)*diskContent, usedSpace);
-      }
-    }
-
-    return spaceSavings;
   }
 };
