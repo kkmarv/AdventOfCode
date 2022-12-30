@@ -111,7 +111,7 @@ class Directory : public DiskContent {
 
   bool hasEnoughSpace() {
     if (&this->parent != this)
-      return -1;
+      return false;
 
     return calcFreeSpace() >= this->diskSpaceForUpgrade;
   }

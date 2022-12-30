@@ -60,6 +60,12 @@
     <Text Include="day7_input_lars.txt">
       <Filter>Resource Files\test</Filter>
     </Text>
+    <Text Include="day14_input.txt">
+      <Filter>Resource Files\input</Filter>
+    </Text>
+    <Text Include="day14_test.txt">
+      <Filter>Resource Files\test</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -92,6 +98,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Day6.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Day14.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SandCave.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
