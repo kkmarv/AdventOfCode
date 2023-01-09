@@ -1,7 +1,8 @@
 ﻿---
-BasedOnStyle: Chromium
-AlignConsecutiveAssignments: true
+BasedOnStyle: Microsoft
+AlignConsecutiveAssignments: 'true'
+AllowShortFunctionsOnASingleLine: Inline
 ColumnLimit: '120'
-MaxEmptyLinesToKeep: '2'
-SortIncludes: true
+ConstructorInitializerAllOnOneLineOrOnePerLine: 'true'
+
 ...

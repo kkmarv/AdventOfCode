@@ -6,22 +6,24 @@
 #include "Header.h"
 #include "SandCave.h"
 
+class Day14 : public DayTemplate
+{
+  public:
+    virtual std::string part1(std::ifstream &inputFile) override
+    {
+        util::resetStream(inputFile);
 
-class Day14 : public DayTemplate {
- public:
-  virtual std::string part1(std::ifstream& inputFile) override {
-    util::resetStream(inputFile);
+        Cave c(inputFile);
+        c.printCave();
 
-    Cave c(inputFile);
-    c.printCave();
-    
-    return "-1";
-  };
+        return "-1";
+    };
 
-  virtual std::string part2(std::ifstream& inputFile) override {
-    util::resetStream(inputFile);
-    return "-1";
-  };
+    virtual std::string part2(std::ifstream &inputFile) override
+    {
+        util::resetStream(inputFile);
+        return "-1";
+    };
 
-  Day14() : DayTemplate("24", "", "day14_input.txt", "day14_test.txt"){};
+    Day14() : DayTemplate("24", "", "day14_input.txt", "day14_test.txt"){};
 };
