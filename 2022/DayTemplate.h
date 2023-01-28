@@ -35,14 +35,16 @@ class DayTemplate
      * @param inputFilePath A path to the task input file.
      * @param testFilePath A path to a file containing test data.
      */
-    DayTemplate(std::string expectedValP1, std::string expectedValP2, std::string inputFilePath,
-                std::string testFilePath)
-        : expectedValP1(expectedValP1),
-          expectedValP2(expectedValP2),
-          inputFile(util::readFile(inputFilePath)),
-          testFile(util::readFile(testFilePath))
+    DayTemplate(const std::string &expectedValP1, const std::string &expectedValP2, const std::string &inputFilePath,
+                const std::string &testFilePath)
+        : inputFile(util::readFile(inputFilePath)),
+          testFile(util::readFile(testFilePath)),
+          expectedValP1(expectedValP1),
+          expectedValP2(expectedValP2)
     {
     }
+
+    virtual ~DayTemplate() = default;
 
   private:
     std::ifstream inputFile;

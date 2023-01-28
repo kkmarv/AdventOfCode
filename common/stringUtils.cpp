@@ -1,5 +1,5 @@
 #include "stringUtils.h"
-#include "CustomException.h";
+#include "CustomException.h"
 
 std::ifstream util::readFile(const std::string &fileName)
 {

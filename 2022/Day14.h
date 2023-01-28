@@ -14,8 +14,9 @@ class Day14 : public DayTemplate
 {
   public:
     Day14() : DayTemplate("24", "93", "day14_input.txt", "day14_test.txt"){};
+    ~Day14() override = default;
 
-    virtual std::string part1(std::ifstream &inputFile) override
+    std::string part1(std::ifstream &inputFile) override
     {
         auto rocks = this->parseInputFile(inputFile);
         this->setBorderValues(rocks);
@@ -26,7 +27,7 @@ class Day14 : public DayTemplate
         return std::to_string(sand.size());
     };
 
-    virtual std::string part2(std::ifstream &inputFile) override
+    std::string part2(std::ifstream &inputFile) override
     {
         auto rocks = this->parseInputFile(inputFile);
         this->setBorderValues(rocks);
@@ -67,13 +68,13 @@ class Day14 : public DayTemplate
             for (std::string rockPoint : rockPoints)
             {
                 auto rockCoordinates = util::splitString(rockPoint, ',');
-                Vec2 nextRock        = Vec2{std::stoi(rockCoordinates[0]), std::stoi(rockCoordinates[1])};
+                auto nextRock        = Vec2{std::stoi(rockCoordinates[0]), std::stoi(rockCoordinates[1])};
 
                 // Create a line of rocks.
                 if (lastRock)
                 {
                     rocks.push_back(*lastRock);
-                    for (Vec2 rock : getPointsBetween(*lastRock, nextRock))
+                    for (const Vec2 &rock : getPointsBetween(*lastRock, nextRock))
                         rocks.push_back(rock);
                     rocks.push_back(nextRock);
                 }
@@ -120,21 +121,24 @@ class Day14 : public DayTemplate
      * @param rocks The rocky cave.
      * @param sand The sand particles.
      */
-    const void printScan(const std::vector<Vec2> &rocks, const std::vector<Vec2> &sand) const
+    void printScan(const std::vector<Vec2> &rocks, const std::vector<Vec2> &sand) const
     {
+        if (rocks.empty())
+            return;
+
         // Create the 2D vector of needed size.
-        std::vector<std::vector<char>> scannedLayers(yMax + 1, std::vector<char>(xMax - xMin + 1, Tile::AIR));
-        scannedLayers[SAND_SPAWN_POINT.y][SAND_SPAWN_POINT.x - xMin] = Tile::START;
+        std::vector<std::vector<char>> scannedLayers(yMax + 1, std::vector<char>(xMax - this->xMin + 1, Tile::AIR));
+        scannedLayers[SAND_SPAWN_POINT.y][SAND_SPAWN_POINT.x - this->xMin] = Tile::START;
 
         // Update the scannedLayers with the positions of the rocks.
         for (auto &rock : rocks)
-            scannedLayers[rock.y][rock.x - xMin] = Tile::ROCK;
+            scannedLayers[rock.y][rock.x - this->xMin] = Tile::ROCK;
 
         for (auto &sandCorn : sand)
-            scannedLayers[sandCorn.y][sandCorn.x - xMin] = Tile::SAND;
+            scannedLayers[sandCorn.y][sandCorn.x - this->xMin] = Tile::SAND;
 
         // Print the scannedLayers.
-        for (auto &scanLayer : scannedLayers)
+        for (const auto &scanLayer : scannedLayers)
         {
             for (auto scanResult : scanLayer)
                 std::cout << scanResult;
@@ -180,25 +184,25 @@ class Day14 : public DayTemplate
                     return sand;
 
                 // Try moving down.
-                if (std::find(rocks.begin(), rocks.end(), sandCorn + Vec2{0, 1}) == rocks.end() &&
-                    std::find(sand.begin(), sand.end(), sandCorn + Vec2{0, 1}) == sand.end())
+                if (!std::binary_search(rocks.begin(), rocks.end(), sandCorn + Vec2{0, 1}) &&
+                    !std::binary_search(sand.begin(), sand.end(), sandCorn + Vec2{0, 1}))
                     sandCorn++;
 
                 // Try moving down and to the left.
-                else if (std::find(rocks.begin(), rocks.end(), sandCorn + Vec2{-1, 1}) == rocks.end() &&
-                         std::find(sand.begin(), sand.end(), sandCorn + Vec2{-1, 1}) == sand.end())
+                else if (!std::binary_search(rocks.begin(), rocks.end(), sandCorn + Vec2{-1, 1}) &&
+                         !std::binary_search(sand.begin(), sand.end(), sandCorn + Vec2{-1, 1}))
                     sandCorn = sandCorn + Vec2{-1, 1};
 
                 // Try moving down and to the right.
-                else if (std::find(rocks.begin(), rocks.end(), sandCorn + Vec2{1, 1}) == rocks.end() &&
-                         std::find(sand.begin(), sand.end(), sandCorn + Vec2{1, 1}) == sand.end())
+                else if (!std::binary_search(rocks.begin(), rocks.end(), sandCorn + Vec2{1, 1}) &&
+                         !std::binary_search(sand.begin(), sand.end(), sandCorn + Vec2{1, 1}))
                     sandCorn = sandCorn + Vec2{1, 1};
 
                 // The sandCorn came to rest.
                 else
                 {
-                    auto insertionIndex = std::upper_bound(sand.cbegin(), sand.cend(), sandCorn);
-                    sand.insert(insertionIndex, sandCorn);
+                    auto insertionIt = std::upper_bound(sand.cbegin(), sand.cend(), sandCorn);
+                    sand.insert(insertionIt, sandCorn);
                     break;
                 }
             }
