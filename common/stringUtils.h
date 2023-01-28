@@ -5,10 +5,12 @@
 #include <string>
 #include <vector>
 
-namespace util {
+namespace util
+{
 
-   std::ifstream readFile(const std::string& fileName);
-   std::vector<std::string> splitString(const std::string& str, char delimiter);
-   void resetStream(std::ifstream& stream);
+std::ifstream readFile(const std::string &fileName);
+std::vector<std::string> splitString(const std::string &inputStr, const char delimiter);
+std::vector<std::string> splitString(const std::string &inputStr, const std::string &delimiter);
+void resetStream(std::ifstream &stream);
 
-}
+} // namespace util

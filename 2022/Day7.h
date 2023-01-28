@@ -7,8 +7,8 @@
 #include <stringUtils.h>
 #include <unitTests.h>
 
+#include "DayTemplate.h"
 #include "DiskContent.h"
-#include "Header.h"
 
 class Day7 : public DayTemplate
 {

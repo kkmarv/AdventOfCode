@@ -76,7 +76,7 @@
     <ClInclude Include="DiskContent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Header.h">
+    <ClInclude Include="DayTemplate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Day1.h">

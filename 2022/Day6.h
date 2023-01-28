@@ -5,7 +5,7 @@
 
 #include <stringUtils.h>
 
-#include "Header.h"
+#include "DayTemplate.h"
 
 class Day6 : public DayTemplate
 {

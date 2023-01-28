@@ -4,5 +4,6 @@ AlignConsecutiveAssignments: 'true'
 AllowShortFunctionsOnASingleLine: Inline
 ColumnLimit: '120'
 ConstructorInitializerAllOnOneLineOrOnePerLine: 'true'
+AlwaysBreakTemplateDeclarations: 'Yes'
 
 ...
