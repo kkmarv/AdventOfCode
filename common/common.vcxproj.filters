@@ -27,6 +27,9 @@
     <ClInclude Include="shortcuts.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="vectorUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stringUtils.cpp">

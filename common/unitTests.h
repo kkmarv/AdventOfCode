@@ -8,40 +8,40 @@ static int testNumber = 1;
 
 namespace Ansi
 {
-static std::string GREEN = "\33[32m";
-static std::string RED   = "\33[31m";
-static std::string RESET = "\33[39;49m";
+const std::string RED   = "\33[31m";
+const std::string GREEN = "\33[32m";
+const std::string RESET = "\33[39;49m";
 } // namespace Ansi
 
 namespace unitTest
 {
 
-static void printResult(const bool success)
+static void printResult(const bool isSuccessful)
 {
-    std::cout << testNumber++ << ')' << " Test";
-    std::cout << success ? Ansi::GREEN + " PASSED " : Ansi::RED + " FAILED";
+    std::cout << "Test Part " << testNumber++ << ") ";
+    std::cout << (isSuccessful ? Ansi::GREEN + " PASSED " : Ansi::RED + " FAILED");
     std::cout << Ansi::RESET << std::endl;
 }
 
-static void printResult(const bool success, const std::string &message)
+static void printResult(const bool isSuccessful, const std::string &message)
 {
-    printResult(success);
-    std::cout << ": " << message << std::endl;
+    printResult(isSuccessful);
+    std::cout << ": " << std::endl << message << std::endl;
 }
 
 template <typename T>
-static void printResult(T actual, T expected, const bool success, const std::string &message)
+static void printResult(T actual, T expected, const bool isSuccessful, const std::string &message)
 {
-    printResult(success, message);
-    if (!success)
+    printResult(isSuccessful, message);
+    if (!isSuccessful)
         std::cout << "Reason: Expected " << expected << " but was " << actual << std::endl;
 }
 
 template <typename T>
-static void printResult(T actual, T expected, const bool success)
+static void printResult(T actual, T expected, const bool isSuccessful)
 {
-    printResult(success);
-    if (!success)
+    printResult(isSuccessful);
+    if (!isSuccessful)
         std::cout << "Reason: Expected " << expected << " but was " << actual << std::endl;
 }
 
@@ -51,7 +51,7 @@ inline void assert(const bool expression, const std::string &message)
 }
 
 template <typename T>
-void assertEquals(T actual, T expected)
+inline void assertEquals(T actual, T expected)
 {
     if (actual == expected)
         printResult(true);
@@ -60,7 +60,7 @@ void assertEquals(T actual, T expected)
 }
 
 template <typename T>
-void assertEquals(T actual, T expected, const std::string &message)
+inline void assertEquals(T actual, T expected, const std::string &message)
 {
     if (actual == expected)
         printResult(true, message);
@@ -69,13 +69,13 @@ void assertEquals(T actual, T expected, const std::string &message)
 }
 
 template <typename T>
-void assertEquals(T actual, T expected, const char *message)
+inline void assertEquals(T actual, T expected, const char *message)
 {
     assertEquals(actual, expected, std::string(message));
 }
 
 template <typename T>
-void contains(std::vector<T> &vector, T element, const std::string &message)
+inline void contains(std::vector<T> &vector, T element, const std::string &message)
 {
     if (std::find(vector.begin(), vector.end(), element) != vector.end())
         printResult(true, message);

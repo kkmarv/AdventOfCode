@@ -132,6 +132,7 @@
     <ClInclude Include="shortcuts.h" />
     <ClInclude Include="stringUtils.h" />
     <ClInclude Include="unitTests.h" />
+    <ClInclude Include="vectorUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stringUtils.cpp" />

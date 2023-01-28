@@ -24,8 +24,8 @@ class DayTemplate
 
     virtual std::ifstream &getInputFile() { return this->inputFile; }
     virtual std::ifstream &getTestFile() { return this->testFile; }
-    virtual const std::string &getExpectedValP1() const { return this->expectedValP1; }
-    virtual const std::string &getExpectedValP2() const { return this->expectedValP2; }
+    virtual const std::string &getExpectedValuePart1() const { return this->expectedValP1; }
+    virtual const std::string &getExpectedValuePart2() const { return this->expectedValP2; }
 
   protected:
     /**

@@ -13,12 +13,13 @@
 class Day14 : public DayTemplate
 {
   public:
-    Day14() : DayTemplate("24", "", "day14_input.txt", "day14_test.txt"){};
+    Day14() : DayTemplate("24", "93", "day14_input.txt", "day14_test.txt"){};
 
     virtual std::string part1(std::ifstream &inputFile) override
     {
         auto rocks = this->parseInputFile(inputFile);
         this->setBorderValues(rocks);
+
         auto sand = this->simulateSandDrops(rocks);
         this->printScan(rocks, sand);
 
@@ -27,7 +28,12 @@ class Day14 : public DayTemplate
 
     virtual std::string part2(std::ifstream &inputFile) override
     {
-        util::resetStream(inputFile);
+        auto rocks = this->parseInputFile(inputFile);
+        this->setBorderValues(rocks);
+
+        auto sand = this->simulateSandDrops(rocks);
+        // this->printScan(rocks, sand);
+
         return "-1";
     };
 
@@ -39,7 +45,7 @@ class Day14 : public DayTemplate
     const Vec2 SAND_SPAWN_POINT = Vec2{500, 0};
 
     /**
-     * @brief Parse the task cave from given istream and create a vector which contains all rock coordinates as
+     * @brief Parse the task cave from given ifstream and create a vector which contains all rock coordinates as
      * Vec2 objetcs. Resolve the end points from task input to real coordinates on the way.
      * @param inputFile The file which to parse.
      * @return An unordered vector of Vec2 objects representing all cave.
@@ -75,6 +81,8 @@ class Day14 : public DayTemplate
                 lastRock = std::make_unique<Vec2>(nextRock);
             }
         }
+
+        std::sort(rocks.begin(), rocks.end());
         return rocks;
     }
 
@@ -109,7 +117,8 @@ class Day14 : public DayTemplate
 
     /**
      * @brief Prints given cave to console.
-     * @param cave The rocky cave.
+     * @param rocks The rocky cave.
+     * @param sand The sand particles.
      */
     const void printScan(const std::vector<Vec2> &rocks, const std::vector<Vec2> &sand) const
     {
@@ -135,7 +144,7 @@ class Day14 : public DayTemplate
 
     /**
      * @brief Sets class member values for border values of the cave.
-     * @param vector The rocky cave.
+     * @param rocks The rocky cave.
      */
     void setBorderValues(const std::vector<Vec2> &rocks)
     {
@@ -155,10 +164,9 @@ class Day14 : public DayTemplate
      * @param cave The rocky cave in which to drop sand.
      * @return The cave after the first sand corn dropped out of bounds.
      */
-    std::vector<Vec2> simulateSandDrops(std::vector<Vec2> cave) const
+    std::vector<Vec2> simulateSandDrops(std::vector<Vec2> &rocks) const
     {
         std::vector<Vec2> sand;
-        std::sort(cave.begin(), cave.end());
 
         while (true)
         {
@@ -172,17 +180,17 @@ class Day14 : public DayTemplate
                     return sand;
 
                 // Try moving down.
-                if (std::find(cave.begin(), cave.end(), sandCorn + Vec2{0, 1}) == cave.end() &&
+                if (std::find(rocks.begin(), rocks.end(), sandCorn + Vec2{0, 1}) == rocks.end() &&
                     std::find(sand.begin(), sand.end(), sandCorn + Vec2{0, 1}) == sand.end())
                     sandCorn++;
 
                 // Try moving down and to the left.
-                else if (std::find(cave.begin(), cave.end(), sandCorn + Vec2{-1, 1}) == cave.end() &&
+                else if (std::find(rocks.begin(), rocks.end(), sandCorn + Vec2{-1, 1}) == rocks.end() &&
                          std::find(sand.begin(), sand.end(), sandCorn + Vec2{-1, 1}) == sand.end())
                     sandCorn = sandCorn + Vec2{-1, 1};
 
                 // Try moving down and to the right.
-                else if (std::find(cave.begin(), cave.end(), sandCorn + Vec2{1, 1}) == cave.end() &&
+                else if (std::find(rocks.begin(), rocks.end(), sandCorn + Vec2{1, 1}) == rocks.end() &&
                          std::find(sand.begin(), sand.end(), sandCorn + Vec2{1, 1}) == sand.end())
                     sandCorn = sandCorn + Vec2{1, 1};
 
