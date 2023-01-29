@@ -27,7 +27,7 @@ inline void sortedInsert(std::vector<T> &vector, T item)
 template <typename T>
 inline void print(std::vector<T> vector)
 {
-    for (item : vector)
+    for (T item : vector)
         std::cout << item << std::endl;
 }
 

@@ -6,6 +6,7 @@
 #include <memory>
 
 #include <stringUtils.h>
+#include <vectorUtils.h>
 
 #include "DayTemplate.h"
 #include "SandCave.h"
@@ -21,7 +22,7 @@ class Day14 : public DayTemplate
         auto rocks = this->parseInputFile(inputFile);
         this->setBorderValues(rocks);
 
-        auto sand = this->simulateSandDrops(rocks);
+        auto sand = this->simulateSandDrops(rocks, false);
         this->printScan(rocks, sand);
 
         return std::to_string(sand.size());
@@ -32,16 +33,17 @@ class Day14 : public DayTemplate
         auto rocks = this->parseInputFile(inputFile);
         this->setBorderValues(rocks);
 
-        auto sand = this->simulateSandDrops(rocks);
-        // this->printScan(rocks, sand);
+        auto sand = this->simulateSandDrops(rocks, true);
+        this->printScan(rocks, sand);
 
-        return "-1";
+        return std::to_string(sand.size());
     };
 
   private:
-    int yMax = 0;
-    int xMin = std::numeric_limits<int>::max();
-    int xMax = std::numeric_limits<int>::min();
+    int yMax   = 0;                               // Deepest rock formation
+    int yFloor = yMax + 2;                        // Floor plane (part 2)
+    int xMin   = std::numeric_limits<int>::max(); // Furthest rock formation to the left.
+    int xMax   = std::numeric_limits<int>::min(); // Furthest rock formation to the right.
 
     const Vec2 SAND_SPAWN_POINT = Vec2{500, 0};
 
@@ -161,6 +163,7 @@ class Day14 : public DayTemplate
             if (rock.y > this->yMax)
                 this->yMax = rock.y;
         }
+        this->yFloor = this->yMax + 2;
     }
 
     /**
@@ -168,7 +171,7 @@ class Day14 : public DayTemplate
      * @param cave The rocky cave in which to drop sand.
      * @return The cave after the first sand corn dropped out of bounds.
      */
-    std::vector<Vec2> simulateSandDrops(std::vector<Vec2> &rocks) const
+    std::vector<Vec2> simulateSandDrops(std::vector<Vec2> &rocks, bool isPart2) const
     {
         std::vector<Vec2> sand;
 
@@ -180,11 +183,17 @@ class Day14 : public DayTemplate
             while (true)
             {
                 // The sandCorn went out of bounds.
-                if (sandCorn.x < this->xMin || sandCorn.x > this->xMax || sandCorn.y > this->yMax)
+                if (!isPart2 && (sandCorn.x < this->xMin || sandCorn.x > this->xMax || sandCorn.y > this->yMax))
                     return sand;
 
+                if (isPart2 && (sandCorn.y + 1 != this->yFloor))
+                {
+                    util::sortedInsert(sand, sandCorn);
+                    break;
+                }
+
                 // Try moving down.
-                if (!std::binary_search(rocks.begin(), rocks.end(), sandCorn + Vec2{0, 1}) &&
+                else if (!std::binary_search(rocks.begin(), rocks.end(), sandCorn + Vec2{0, 1}) &&
                     !std::binary_search(sand.begin(), sand.end(), sandCorn + Vec2{0, 1}))
                     sandCorn++;
 
@@ -203,6 +212,12 @@ class Day14 : public DayTemplate
                 {
                     auto insertionIt = std::upper_bound(sand.cbegin(), sand.cend(), sandCorn);
                     sand.insert(insertionIt, sandCorn);
+                    util::sortedInsert(sand, sandCorn);
+
+                    // Used for part 2; in part 1 sand never rests at the spawn.
+                    if (sandCorn == SAND_SPAWN_POINT)
+                        return sand;
+
                     break;
                 }
             }
