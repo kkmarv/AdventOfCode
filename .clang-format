@@ -1,28 +1,11 @@
-﻿Language: Cpp
-
-# Style
-AlignConsecutiveMacros: 'true'
+﻿---
+BasedOnStyle: Microsoft
 AlignConsecutiveAssignments: 'true'
 AlignTrailingComments: 'true'
-
-# Never allow one liners
-AllowShortBlocksOnASingleLine: 'false'
-AllowShortCaseLabelsOnASingleLine: 'false'
-AllowShortIfStatementsOnASingleLine: Never
-AllowShortLoopsOnASingleLine: 'false'
-
-# Braces
-BreakBeforeBraces: Mozilla
-BreakConstructorInitializers: AfterColon
-
-# Wrap nicely
-AlwaysBreakTemplateDeclarations: 'Yes'
+AllowShortFunctionsOnASingleLine: Inline
 BinPackArguments: 'false'
 BinPackParameters: 'false'
+BreakConstructorInitializers: AfterColon
 ConstructorInitializerAllOnOneLineOrOnePerLine: 'true'
 
-# Readability
-ColumnLimit: '120'
-IndentWidth: '4'
-SortIncludes: 'true'
-UseTab: Never
+...

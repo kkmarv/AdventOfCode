@@ -6,8 +6,7 @@
 #include <stringUtils.h>
 #include <unitTests.h>
 
-template <class type>
-class DayTemplate
+template <class type> class DayTemplate
 {
   public:
     /**
@@ -57,4 +56,10 @@ class DayTemplate
     virtual ~DayTemplate() = default;
 
     virtual type parseInputFile(std::ifstream &inputFile) = 0;
+
+    enum class Part
+    {
+        ONE,
+        TWO
+    };
 };
