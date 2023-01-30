@@ -3,8 +3,7 @@
 #include <iostream>
 #include <vector>
 
-namespace util
-{
+namespace util {
 
 /**
  * @brief Inserts an item into a vector and keeps order.

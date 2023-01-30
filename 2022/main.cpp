@@ -2,7 +2,6 @@
 #include <unitTests.h>
 
 #include "Day14.h"
-#include "Day7.h"
 
 int main()
 {

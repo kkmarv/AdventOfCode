@@ -5,8 +5,7 @@
 #include <string>
 #include <vector>
 
-namespace util
-{
+namespace util {
 
 /**
  * @brief Reads a file and returns its contents.

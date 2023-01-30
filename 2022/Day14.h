@@ -11,18 +11,20 @@
 #include "DayTemplate.h"
 #include "SandCave.h"
 
-class Day14 : public DayTemplate
+using Points = std::vector<Vec2>;
+
+class Day14 : public DayTemplate<Points>
 {
   public:
-    Day14() : DayTemplate("24", "93", "day14_input.txt", "day14_test.txt"){};
     ~Day14() override = default;
+    Day14() : DayTemplate("24", "93", "day14_input.txt", "day14_test.txt") {}
 
     std::string part1(std::ifstream &inputFile) override
     {
-        auto rocks = this->parseInputFile(inputFile);
-        this->setBorderValues(rocks);
+        Points rocks = this->parseInputFile(inputFile);
 
-        auto sand = this->simulateSandDrops(rocks, false);
+        this->setBorderValues(rocks, false);
+        Points sand = this->simulateSandDrops(rocks);
         this->printScan(rocks, sand);
 
         return std::to_string(sand.size());
@@ -30,51 +32,48 @@ class Day14 : public DayTemplate
 
     std::string part2(std::ifstream &inputFile) override
     {
-        auto rocks = this->parseInputFile(inputFile);
-        this->setBorderValues(rocks);
+        Points rocks = this->parseInputFile(inputFile);
 
-        auto sand = this->simulateSandDrops(rocks, true);
+        this->setBorderValues(rocks, true);
+        Points sand = this->simulateSandDrops(rocks);
+        this->setBorderValues(sand, false);
         this->printScan(rocks, sand);
 
         return std::to_string(sand.size());
     };
 
   private:
-    int yMax   = 0;                               // Deepest rock formation
-    int yFloor = yMax + 2;                        // Floor plane (part 2)
-    int xMin   = std::numeric_limits<int>::max(); // Furthest rock formation to the left.
-    int xMax   = std::numeric_limits<int>::min(); // Furthest rock formation to the right.
-
     const Vec2 SAND_SPAWN_POINT = Vec2{500, 0};
+
+    int yMax = 0;                               // Deepest rock formation
+    int xMin = std::numeric_limits<int>::min(); // Furthest rock formation to the left.
+    int xMax = std::numeric_limits<int>::max(); // Furthest rock formation to the right.
 
     /**
      * @brief Parse the task cave from given ifstream and create a vector which contains all rock coordinates as
-     * Vec2 objetcs. Resolve the end points from task input to real coordinates on the way.
+     * Vec2 objetcs. Resolve the end Points from task input to real coordinates on the way.
      * @param inputFile The file which to parse.
      * @return An unordered vector of Vec2 objects representing all cave.
      */
-    std::vector<Vec2> parseInputFile(std::ifstream &inputFile) const
+    Points parseInputFile(std::ifstream &inputFile) override
     {
-        std::vector<Vec2> rocks;
+        Points rocks;
 
         // Being cautious and resetting the stream just in case someone has tampered with insertionIndex before.
         util::resetStream(inputFile);
-        for (std::string line; std::getline(inputFile, line);)
-        {
+        for (std::string line; std::getline(inputFile, line);) {
             if (line.empty())
                 continue;
 
             std::unique_ptr<Vec2> lastRock = nullptr;
             const auto rockPoints          = util::splitString(line, " -> ");
 
-            for (std::string rockPoint : rockPoints)
-            {
+            for (std::string rockPoint : rockPoints) {
                 auto rockCoordinates = util::splitString(rockPoint, ',');
                 auto nextRock        = Vec2{std::stoi(rockCoordinates[0]), std::stoi(rockCoordinates[1])};
 
                 // Create a line of rocks.
-                if (lastRock)
-                {
+                if (lastRock) {
                     rocks.push_back(*lastRock);
                     for (const Vec2 &rock : getPointsBetween(*lastRock, nextRock))
                         rocks.push_back(rock);
@@ -90,16 +89,16 @@ class Day14 : public DayTemplate
     }
 
     /**
-     * @brief Create a Vector of all Vec2 objects that are between two given points.
+     * @brief Create a Vector of all Vec2 objects that are between two given Points.
      * @param start The start Vec2 object.
      * @param end The end Vec2 object.
-     * @return A vector of 2D points the are between start and end.
+     * @return A vector of 2D Points the are between start and end.
      */
-    std::vector<Vec2> getPointsBetween(const Vec2 &start, const Vec2 &end) const
+    Points getPointsBetween(const Vec2 &start, const Vec2 &end) const
     {
-        std::vector<Vec2> result;
+        Points result;
 
-        // Insert points along x axis
+        // Insert Points along x axis
         if (start.x < end.x)
             for (int x = start.x; x < end.x; ++x)
                 result.emplace_back(x, end.y);
@@ -107,7 +106,7 @@ class Day14 : public DayTemplate
             for (int x = start.x; x > end.x; --x)
                 result.emplace_back(x, end.y);
 
-        // Insert points along y axis
+        // Insert Points along y axis
         if (start.y < end.y)
             for (int y = start.y; y < end.y; ++y)
                 result.emplace_back(end.x, y);
@@ -120,10 +119,10 @@ class Day14 : public DayTemplate
 
     /**
      * @brief Prints given cave to console.
-     * @param rocks The rocky cave.
+     * @param rocks The rock formation.
      * @param sand The sand particles.
      */
-    void printScan(const std::vector<Vec2> &rocks, const std::vector<Vec2> &sand) const
+    void printScan(const Points &rocks, const Points &sand) const
     {
         if (rocks.empty())
             return;
@@ -140,81 +139,60 @@ class Day14 : public DayTemplate
             scannedLayers[sandCorn.y][sandCorn.x - this->xMin] = Tile::SAND;
 
         // Print the scannedLayers.
-        for (const auto &scanLayer : scannedLayers)
-        {
-            for (auto scanResult : scanLayer)
+        for (const auto &scanLayer : scannedLayers) {
+            for (const auto scanResult : scanLayer)
                 std::cout << scanResult;
             std::cout << std::endl;
         }
     }
 
     /**
-     * @brief Sets class member values for border values of the cave.
-     * @param rocks The rocky cave.
+     * @brief Sets class member values for part 1.
+     * @param points The points to extract min and max borders from.
+     * @param leaveXBorderUndefined Whether to also set x coordinates.
      */
-    void setBorderValues(const std::vector<Vec2> &rocks)
+    void setBorderValues(const Points &points, bool leaveXBorderUndefined)
     {
-        for (auto &rock : rocks)
-        {
-            if (rock.x < this->xMin)
-                this->xMin = rock.x;
-            if (rock.x > this->xMax)
-                this->xMax = rock.x;
-            if (rock.y > this->yMax)
-                this->yMax = rock.y;
+        this->xMax = leaveXBorderUndefined ? std::numeric_limits<int>::max() : std::numeric_limits<int>::min();
+        this->xMin = leaveXBorderUndefined ? std::numeric_limits<int>::min() : std::numeric_limits<int>::max();
+
+        for (const auto &point : points) {
+            if (point.x < this->xMin)
+                this->xMin = point.x;
+            if (point.x > this->xMax)
+                this->xMax = point.x;
+            if (point.y > this->yMax)
+                this->yMax = point.y;
         }
-        this->yFloor = this->yMax + 2;
     }
 
     /**
-     * @brief Simulate sand dropping from the sand spawn point until the first sand corn drops out of bounds.
-     * @param cave The rocky cave in which to drop sand.
-     * @return The cave after the first sand corn dropped out of bounds.
+     * @brief Simulate sandCorns dropping from the sandCorn spawn point until the first sandCorn drops out of
+     * bounds.
+     * @param cave The rocky cave in which to drop rocks.
+     * @return The cave after the first sandCorn dropped out of bounds.
      */
-    std::vector<Vec2> simulateSandDrops(std::vector<Vec2> &rocks, bool isPart2) const
+    Points simulateSandDrops(const Points &rocks) const
     {
-        std::vector<Vec2> sand;
+        Points sand;
 
-        while (true)
-        {
+        while (true) {
             Vec2 sandCorn = SAND_SPAWN_POINT;
 
-            // Find the resting position of the sandCorn.
-            while (true)
-            {
-                // The sandCorn went out of bounds.
-                if (!isPart2 && (sandCorn.x < this->xMin || sandCorn.x > this->xMax || sandCorn.y > this->yMax))
+            // Find the resting position of the rock.
+            while (true) {
+                // The sandCorn went out of bounds. (only applicable for part 1)
+                if (sandCorn.x < this->xMin || sandCorn.x > this->xMax || sandCorn.y > this->yMax)
                     return sand;
 
-                if (isPart2 && (sandCorn.y + 1 != this->yFloor))
-                {
-                    util::sortedInsert(sand, sandCorn);
-                    break;
-                }
-
-                // Try moving down.
-                else if (!std::binary_search(rocks.begin(), rocks.end(), sandCorn + Vec2{0, 1}) &&
-                    !std::binary_search(sand.begin(), sand.end(), sandCorn + Vec2{0, 1}))
-                    sandCorn++;
-
-                // Try moving down and to the left.
-                else if (!std::binary_search(rocks.begin(), rocks.end(), sandCorn + Vec2{-1, 1}) &&
-                         !std::binary_search(sand.begin(), sand.end(), sandCorn + Vec2{-1, 1}))
-                    sandCorn = sandCorn + Vec2{-1, 1};
-
-                // Try moving down and to the right.
-                else if (!std::binary_search(rocks.begin(), rocks.end(), sandCorn + Vec2{1, 1}) &&
-                         !std::binary_search(sand.begin(), sand.end(), sandCorn + Vec2{1, 1}))
-                    sandCorn = sandCorn + Vec2{1, 1};
+                Vec2 previousState = sandCorn;
+                dropSandCorn(sandCorn, sand, rocks);
 
                 // The sandCorn came to rest.
-                else
-                {
-                    auto insertionIt = std::upper_bound(sand.cbegin(), sand.cend(), sandCorn);
-                    sand.insert(insertionIt, sandCorn);
+                if (sandCorn == previousState) {
                     util::sortedInsert(sand, sandCorn);
 
-                    // Used for part 2; in part 1 sand never rests at the spawn.
+                    // Used for part 2; in part 1 sandCorns never rests at the spawn.
                     if (sandCorn == SAND_SPAWN_POINT)
                         return sand;
 
@@ -222,5 +200,27 @@ class Day14 : public DayTemplate
                 }
             }
         }
+    }
+
+    void dropSandCorn(Vec2 &sandCorn, const Points &sand, const Points &rocks) const
+    {
+        // The sandCorn lies on the floor. (part 2)
+        if (sandCorn.y + 1 == this->yMax + 2)
+            return;
+
+        // Try moving down.
+        if (!std::binary_search(rocks.begin(), rocks.end(), sandCorn + Vec2{0, 1}) &&
+            !std::binary_search(sand.begin(), sand.end(), sandCorn + Vec2{0, 1}))
+            sandCorn += Vec2{0, 1};
+
+        // Try moving down and to the left.
+        else if (!std::binary_search(rocks.begin(), rocks.end(), sandCorn + Vec2{-1, 1}) &&
+                 !std::binary_search(sand.begin(), sand.end(), sandCorn + Vec2{-1, 1}))
+            sandCorn += Vec2{-1, 1};
+
+        // Try moving down and to the right.
+        else if (!std::binary_search(rocks.begin(), rocks.end(), sandCorn + Vec2{1, 1}) &&
+                 !std::binary_search(sand.begin(), sand.end(), sandCorn + Vec2{1, 1}))
+            sandCorn += Vec2{1, 1};
     }
 };

@@ -6,6 +6,7 @@
 #include <stringUtils.h>
 #include <unitTests.h>
 
+template <class type>
 class DayTemplate
 {
   public:
@@ -15,17 +16,24 @@ class DayTemplate
      * @return The solution to part 1.
      */
     virtual std::string part1(std::ifstream &inputFile) = 0;
+
     /**
      * @brief
      * @param inputFile A path to the file containing the day's input data.
      * @return The solution to part 2.
      */
-    virtual std::string part2(std::ifstream &inputFile) { return ""; };
+    virtual std::string part2(std::ifstream &inputFile) = 0;
 
-    virtual std::ifstream &getInputFile() { return this->inputFile; }
-    virtual std::ifstream &getTestFile() { return this->testFile; }
+    virtual std::ifstream &getInputFile() { return this->inputFile; };
+    virtual std::ifstream &getTestFile() { return this->testFile; };
     virtual const std::string &getExpectedValuePart1() const { return this->expectedValP1; }
     virtual const std::string &getExpectedValuePart2() const { return this->expectedValP2; }
+
+  private:
+    std::ifstream inputFile;
+    std::ifstream testFile;
+    const std::string expectedValP1;
+    const std::string expectedValP2;
 
   protected:
     /**
@@ -35,20 +43,18 @@ class DayTemplate
      * @param inputFilePath A path to the task input file.
      * @param testFilePath A path to a file containing test data.
      */
-    DayTemplate(const std::string &expectedValP1, const std::string &expectedValP2, const std::string &inputFilePath,
-                const std::string &testFilePath)
-        : inputFile(util::readFile(inputFilePath)),
-          testFile(util::readFile(testFilePath)),
-          expectedValP1(expectedValP1),
-          expectedValP2(expectedValP2)
+    DayTemplate(const std::string &expectedValP1,
+                const std::string &expectedValP2,
+                const std::string &inputFilePath,
+                const std::string &testFilePath) :
+        inputFile(util::readFile(inputFilePath)),
+        testFile(util::readFile(testFilePath)),
+        expectedValP1(expectedValP1),
+        expectedValP2(expectedValP2)
     {
     }
 
     virtual ~DayTemplate() = default;
 
-  private:
-    std::ifstream inputFile;
-    std::ifstream testFile;
-    const std::string expectedValP1;
-    const std::string expectedValP2;
+    virtual type parseInputFile(std::ifstream &inputFile) = 0;
 };

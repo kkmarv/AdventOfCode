@@ -6,15 +6,14 @@
 
 static int testNumber = 1;
 
-namespace Ansi
-{
+namespace Ansi {
+
 const std::string RED   = "\33[31m";
 const std::string GREEN = "\33[32m";
 const std::string RESET = "\33[39;49m";
 } // namespace Ansi
 
-namespace unitTest
-{
+namespace unitTest {
 
 static void printResult(const bool isSuccessful)
 {
