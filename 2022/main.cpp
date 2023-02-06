@@ -2,10 +2,11 @@
 #include <unitTests.h>
 
 #include "Day14.h"
+#include "Day6.h"
 
 int main()
 {
-    Day14 day;
+    Day6 day;
 
     unitTest::assertEquals(day.part1(day.getTestFile()), day.getExpectedValuePart1());
     std::cout << "Result Part 1:" << std::endl << day.part1(day.getInputFile()) << std::endl;

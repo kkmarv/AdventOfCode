@@ -164,8 +164,8 @@ class Day14 : public DayTemplate<Points>
         // Print the scannedLayers.
         for (const auto &scanLayer : scannedLayers)
         {
-            for (const auto scanResult : scanLayer)
-                std::cout << scanResult;
+            for (const char tile : scanLayer)
+                std::cout << tile;
             std::cout << std::endl;
         }
     }
@@ -199,15 +199,14 @@ class Day14 : public DayTemplate<Points>
                     return sand;
 
                 Vec2 previousState = sandCorn;
-                dropSandCorn(sandCorn, sand, rocks, border);
+                dropSandCorn(sandCorn, sand, rocks, border, part);
 
                 // The sandCorn came to rest.
                 if (sandCorn == previousState)
                 {
                     util::sortedInsert(sand, sandCorn);
 
-                    // Used for part 2; in part 1, sandCorns never rests at the spawn.
-                    if (sandCorn == SAND_SPAWN_POINT)
+                    if (part == Part::TWO && sandCorn == SAND_SPAWN_POINT)
                         return sand;
 
                     break;
@@ -223,10 +222,10 @@ class Day14 : public DayTemplate<Points>
      * @param rocks An ordered vector of rocks.
      * @param border The borders to be respected.
      */
-    void dropSandCorn(Vec2 &sandCorn, const Points &sand, const Points &rocks, const Border &border) const
+    void dropSandCorn(Vec2 &sandCorn, const Points &sand, const Points &rocks, const Border &border, Part part) const
     {
-        // The sandCorn lies on the cave floor. (part 2)
-        if (sandCorn.y == border.yMax + 1)
+        // The sandCorn lies on the cave floor.
+        if (part == Part::TWO && sandCorn.y == border.yMax + 1)
             return;
 
         // Try moving down.

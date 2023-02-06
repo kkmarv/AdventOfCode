@@ -1,58 +1,90 @@
 #pragma once
 
-#include <algorithm>
 #include <fstream>
+#include <unordered_map>
 
 #include <stringUtils.h>
 
 #include "DayTemplate.h"
 
-class Day6 : public DayTemplate
+class Day6 : public DayTemplate<std::vector<std::string>>
 {
-  private:
-    std::ifstream inputFile         = util::readFile("./day6_input.txt");
-    std::ifstream testFile          = util::readFile("./day6_test.txt");
-    const std::string expectedValP1 = "";
-    const std::string expectedValP2 = "";
-
   public:
+    Day6() : DayTemplate("7 5 6 10 11 ", "19 23 23 29 26 ", "day6_input.txt", "day6_test.txt") {}
+
     std::string part1(std::ifstream &inputFile) override
     {
-        util::resetStream(inputFile);
+        auto messages = parseInputFile(inputFile);
 
-        for (std::string line; std::getline(inputFile, line);)
-        {
-            if (line.empty())
-                continue;
+        std::string resultString = "";
+        for (const std::string &message : messages)
+            resultString += do_it(message) + " ";
 
-            std::vector<char> scramble(4);
-
-            for (size_t pos = 0; pos < line.size(); ++pos)
-            {
-                auto it = std::adjacent_find(scramble.begin(), scramble.end());
-
-                // No duplicates in vector
-                if (it == scramble.end() && scramble.size() != 4)
-                    return std::to_string(pos);
-                else
-                    scramble.clear();
-
-                scramble.push_back(line[pos]);
-            }
-        }
-        return "";
+        return resultString;
     }
 
     std::string part2(std::ifstream &inputFile) override
     {
-        util::resetStream(inputFile);
+        auto messages = parseInputFile(inputFile);
 
+        std::string resultString = "";
+        for (const std::string &message : messages)
+            resultString += do_it(message, 14) + " ";
+
+        return resultString;
+    }
+
+  private:
+    std::vector<std::string> parseInputFile(std::ifstream &inputFile) override
+    {
+        std::vector<std::string> messages;
+
+        util::resetStream(inputFile);
         for (std::string line; std::getline(inputFile, line);)
         {
             if (line.empty())
                 continue;
+
+            messages.push_back(line);
         }
 
-        return "";
+        return messages;
+    }
+
+    /**
+     * @brief Returns the first index of a packet in a given datastream.
+     * The start of a packet is defined by the first non-repeating sequence of characters occurring in a datastream.
+     * @param message
+     * @param window_size
+     * @return
+     */
+    std::string do_it(const std::string &message, const int window_size = 4) const
+    {
+        std::unordered_map<char, int> charCount;
+
+        if (message.length() <= 4)
+            return "";
+
+        int i = 0;
+        for (; i < message.length(); ++i)
+        {
+            ++charCount[message[i]];
+
+            // remove chars that fall out off the window
+            if (i >= window_size)
+            {
+                const char pebbles = message[i - window_size];
+
+                --charCount[pebbles];
+                if (charCount[pebbles] == 0)
+                    charCount.erase(pebbles);
+            }
+
+            // we have what we searched for when there are 4 chars of count 1
+            if (charCount.size() == window_size)
+                break;
+        }
+
+        return std::to_string(i + 1);
     }
 };

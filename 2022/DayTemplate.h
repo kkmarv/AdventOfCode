@@ -6,7 +6,7 @@
 #include <stringUtils.h>
 #include <unitTests.h>
 
-template <class type> class DayTemplate
+template <typename T> class DayTemplate
 {
   public:
     /**
@@ -37,8 +37,8 @@ template <class type> class DayTemplate
   protected:
     /**
      * @brief
-     * @param expectedValP1 The expected output value for part 1.
-     * @param expectedValP2 The expected output value for part 2.
+     * @param expectedValP1 The expected output value for the part 1 test case.
+     * @param expectedValP2 The expected output value for the part 2 test case.
      * @param inputFilePath A path to the task input file.
      * @param testFilePath A path to a file containing test data.
      */
@@ -55,7 +55,7 @@ template <class type> class DayTemplate
 
     virtual ~DayTemplate() = default;
 
-    virtual type parseInputFile(std::ifstream &inputFile) = 0;
+    virtual T parseInputFile(std::ifstream &inputFile) = 0;
 
     enum class Part
     {
