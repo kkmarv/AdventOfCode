@@ -1,8 +1,7 @@
 #include <stringUtils.h>
 #include <unitTests.h>
 
-#include "Day14.h"
-#include "Day6.h"
+#include "Days.h"
 
 int main()
 {

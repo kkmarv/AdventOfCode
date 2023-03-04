@@ -148,19 +148,20 @@
     <Text Include="day7_input_lars.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Day1.cpp" />
+    <ClCompile Include="Day14.cpp" />
+    <ClCompile Include="Day2.cpp" />
+    <ClCompile Include="Day3.cpp" />
+    <ClCompile Include="Day4.cpp" />
+    <ClCompile Include="Day6.cpp" />
+    <ClCompile Include="Day7.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Day1.h" />
-    <ClInclude Include="Day14.h" />
-    <ClInclude Include="Day3.h" />
-    <ClInclude Include="Day4.h" />
     <ClInclude Include="Day5.h" />
     <ClInclude Include="Day6.h" />
-    <ClInclude Include="Day7.h" />
+    <ClInclude Include="Days.h" />
     <ClInclude Include="DiskContent.h" />
-    <ClInclude Include="DayTemplate.h" />
-    <ClInclude Include="Day2.h" />
     <ClInclude Include="SandCave.h" />
   </ItemGroup>
   <ItemGroup>
