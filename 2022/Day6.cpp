@@ -45,7 +45,7 @@ std::vector<std::string> Day6::parseInputFile(std::ifstream &inputFile)
  * @param window_size
  * @return
  */
-std::string Day6::findMessageStart(const std::string &message, const int window_size = 4) const
+std::string Day6::findMessageStart(const std::string &message, const int window_size) const
 {
     std::unordered_map<char, int> charCount;
 

@@ -102,7 +102,7 @@ Points Day14::getPointsBetween(const Vec2 &start, const Vec2 &end) const
     return result;
 }
 
-Border Day14::getBorder(const Points &points, const bool leaveXBorderUndefined = false) const
+Border Day14::getBorder(const Points &points, const bool leaveXBorderUndefined) const
 {
     int yMax = 0;
     int xMin = leaveXBorderUndefined ? std::numeric_limits<int>::min() : std::numeric_limits<int>::max();

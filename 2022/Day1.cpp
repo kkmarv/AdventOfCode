@@ -42,4 +42,7 @@ std::string Day1::part1(std::ifstream &inputFile)
            std::to_string(backpackCaloriesMax2) + " " + std::to_string(backpackCaloriesMax3);
 }
 
-std::string Day1::part2(std::ifstream &inputFile) {}
+std::string Day1::part2(std::ifstream &inputFile)
+{
+    return "";
+}

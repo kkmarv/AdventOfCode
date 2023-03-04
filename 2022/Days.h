@@ -77,6 +77,9 @@ class Day1 : public DayBase<std::string, void>
     ~Day1() override = default;
     std::string part1(std::ifstream &inputFile) override;
     std::string part2(std::ifstream &inputFile) override;
+
+  private:
+    void parseInputFile(std::ifstream &inputFile) override;
 };
 
 class Day2 : public DayBase<std::string, void>
@@ -88,13 +91,16 @@ class Day2 : public DayBase<std::string, void>
     std::string part2(std::ifstream &inputFile) override;
 
   private:
-    static enum Move
+    void parseInputFile(std::ifstream &inputFile) override;
+
+    enum Move
     {
         ROCK     = 1,
         PAPER    = 2,
         SCISSORS = 3
     };
-    static enum Outcome
+
+    enum Outcome
     {
         LOSE = 0,
         DRAW = 3,
@@ -111,6 +117,8 @@ class Day3 : public DayBase<std::string, void>
     std::string part2(std::ifstream &inputFile) override;
 
   private:
+    void parseInputFile(std::ifstream &inputFile) override;
+
     int prio(char c) const;
 };
 
@@ -123,6 +131,8 @@ class Day4 : public DayBase<std::string, void>
     std::string part2(std::ifstream &inputFile) override;
 
   private:
+    void parseInputFile(std::ifstream &inputFile) override;
+
     bool intervalsOverlapTotal(int aLower, int aUpper, int bLower, int bUpper) const;
     bool intervalsOverlap(int aLower, int aUpper, int bLower, int bUpper) const;
 };
@@ -136,9 +146,11 @@ class Day5 : public DayBase<std::string, void>
     std::string part2(std::ifstream &inputFile) override;
 
   private:
-    void moveCrates(std::vector<std::deque<char>> &storagePlaces, int count, int from, int to);
-    void moveMultipleCrates(std::vector<std::deque<char>> &storagePlaces, int count, int from, int to);
-    void printStorage(const std::vector<std::deque<char>> &storagePlaces);
+    void parseInputFile(std::ifstream &inputFile) override;
+
+    void moveCrates(std::vector<std::deque<char>> &storagePlaces, int count, int from, int to) const;
+    void moveMultipleCrates(std::vector<std::deque<char>> &storagePlaces, int count, int from, int to) const;
+    void printStorage(const std::vector<std::deque<char>> &storagePlaces) const;
 };
 
 class Day6 : public DayBase<std::string, std::vector<std::string>>
@@ -148,10 +160,11 @@ class Day6 : public DayBase<std::string, std::vector<std::string>>
     ~Day6() override = default;
     std::string part1(std::ifstream &inputFile) override;
     std::string part2(std::ifstream &inputFile) override;
-    std::vector<std::string> parseInputFile(std::ifstream &inputFile) override;
 
   private:
-    std::string findMessageStart(const std::string &message, const int window_size) const;
+    std::vector<std::string> parseInputFile(std::ifstream &inputFile) override;
+
+    std::string findMessageStart(const std::string &message, const int window_size = 4) const;
 };
 
 class Day7 : public DayBase<std::string, void>
@@ -163,6 +176,8 @@ class Day7 : public DayBase<std::string, void>
     std::string part2(std::ifstream &inputFile) override;
 
   private:
+    void parseInputFile(std::ifstream &inputFile) override;
+
     Directory *parseCommands(std::ifstream &inputFile);
     size_t sum(const Directory &directory);
 };
@@ -181,8 +196,9 @@ class Day14 : public DayBase<std::vector<Vec2>, std::vector<Vec2>>
     const Vec2 SAND_SPAWN_POINT = Vec2{500, 0};
 
     Points parseInputFile(std::ifstream &inputFile) override;
+
     Points getPointsBetween(const Vec2 &start, const Vec2 &end) const;
-    Border getBorder(const Points &points, const bool leaveXBorderUndefined) const;
+    Border getBorder(const Points &points, const bool leaveXBorderUndefined = false) const;
     Points simulateSandDrops(const Points &rocks, const Border &border, Part part) const;
     void dropSandCorn(Vec2 &sandCorn, const Points &sand, const Points &rocks, const Border &border, Part part) const;
     bool isPointFree(const Vec2 &point, const Points &rocks, const Points &sand) const;

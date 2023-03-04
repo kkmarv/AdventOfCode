@@ -13,7 +13,7 @@ std::string Day5::part1(std::ifstream &inputFile)
         // TODO look into resize/reserve vector
         // Initialize crate stacks (runs only once)
         while (storagePlaces.size() < line.size() / 4 + 1)
-            storagePlaces.push_back(std::deque<char>());
+            storagePlaces.emplace_back();
 
         // Read every 4th element and assign it to its corresponding stack
         for (size_t col = 1; col < line.size(); col += 4)
@@ -70,7 +70,7 @@ std::string Day5::part2(std::ifstream &inputFile)
 
         // Initialize crate stacks (runs only once)
         while (storagePlaces.size() < line.size() / 4 + 1)
-            storagePlaces.push_back(std::deque<char>());
+            storagePlaces.emplace_back();
 
         // Read every 4th element and assign it to its corresponding stack
         for (size_t col = 1; col < line.size(); col += 4)
@@ -115,7 +115,7 @@ std::string Day5::part2(std::ifstream &inputFile)
     return result;
 }
 
-void Day5::moveCrates(std::vector<std::deque<char>> &storagePlaces, int count, int from, int to)
+void Day5::moveCrates(std::vector<std::deque<char>> &storagePlaces, int count, int from, int to) const
 {
     for (int i = 0; i < count; i++)
     {
@@ -124,13 +124,13 @@ void Day5::moveCrates(std::vector<std::deque<char>> &storagePlaces, int count, i
     }
 }
 
-void Day5::moveMultipleCrates(std::vector<std::deque<char>> &storagePlaces, int count, int from, int to)
+void Day5::moveMultipleCrates(std::vector<std::deque<char>> &storagePlaces, int count, int from, int to) const
 {
     std::copy(storagePlaces[from].end() - count, storagePlaces[from].end(), std::back_inserter(storagePlaces[to]));
     storagePlaces[from].resize(storagePlaces[from].size() - count);
 }
 
-void Day5::printStorage(const std::vector<std::deque<char>> &storagePlaces)
+void Day5::printStorage(const std::vector<std::deque<char>> &storagePlaces) const
 {
     for (size_t i = 0; i < storagePlaces.size(); ++i)
     {

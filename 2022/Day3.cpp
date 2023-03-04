@@ -52,7 +52,8 @@ std::string Day3::part2(std::ifstream &inputFile)
     // The vector keeping the common items between elf 2 and 3
     std::vector<char> commonItems2;
 
-    for (std::string line, int lineNumber = 0; std::getline(inputFile, line); ++lineNumber)
+    int lineNumber = 0;
+    for (std::string line; std::getline(inputFile, line); ++lineNumber)
     {
         if (line.empty())
             continue;

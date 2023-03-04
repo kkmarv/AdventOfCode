@@ -84,4 +84,7 @@ std::string Day2::part1(std::ifstream &inputFile)
     return std::to_string(score1) + " " + std::to_string(score2);
 }
 
-std::string part2(std::ifstream &inputFile) {}
+std::string part2(std::ifstream &inputFile)
+{
+    return "";
+}
